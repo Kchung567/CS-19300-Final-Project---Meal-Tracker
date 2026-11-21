@@ -34,7 +34,7 @@ If they want to create:
 Clone Repository
 
 ```bash
-git clone https://github.com/you/your-project
+git clone https://github.com/Kchung567/CS-19300-Final-Project---Meal-Tracker.git
 ```
 
 ## Usage
