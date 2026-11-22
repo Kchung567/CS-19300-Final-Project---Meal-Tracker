@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Meals {
+public class Meals implements java.io.Serializable {
     private String name;
     private int calories;
     private int protein;

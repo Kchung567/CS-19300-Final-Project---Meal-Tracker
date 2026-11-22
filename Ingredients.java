@@ -1,4 +1,4 @@
-public class Ingredients {
+public class Ingredients implements java.io.Serializable {
     private int calories;
     private int protein;
     private int carbs;
@@ -6,7 +6,7 @@ public class Ingredients {
     private int sugar;
     private String name;
 
-    public Ingredients(String name, int calories, int protein, int carbs, int fat, int sugar) {
+    public Ingredients(String name, int calories, int protein, int carbs, int fat, int sugar){
         this.name = name;
         this.calories = calories;
         this.protein = protein;
