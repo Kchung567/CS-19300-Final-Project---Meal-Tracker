@@ -44,22 +44,37 @@ public class Ingredients {
     }
 
     public void setCalories(int calories) {
+        if (calories < 0) {
+            throw new IllegalArgumentException("Calorie value cannot be negative.");
+        }
         this.calories = calories;
     }
 
     public void setProtein(int protein) {
+        if (protein < 0) {
+            throw new IllegalArgumentException("Protein value cannot be negative.");
+        }
         this.protein = protein;
     }
 
     public void setCarbs(int carbs) {
+        if (carbs < 0) {
+            throw new IllegalArgumentException("Carbohydrate value cannot be negative.");
+        }
         this.carbs = carbs;
     }
 
     public void setFat(int fat) {
+        if (fat < 0) {
+            throw new IllegalArgumentException("Fat value cannot be negative.");
+        }
         this.fat = fat;
     }
 
     public void setSugar(int sugar) {
+        if (sugar < 0) {
+            throw new IllegalArgumentException("Sugar value cannot be negative.");
+        }
         this.sugar = sugar;
     }
 }

@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Meals {
     private String name;
     private int calories;
@@ -15,7 +17,11 @@ public class Meals {
         carbs = 0;
         fat = 0;
         sugar = 0;
-        this.servings = servings;
+        if (servings <= 0) {
+            this.servings = 1;
+        } else {
+            this.servings = servings;
+        }
         this.ingredients = new ArrayList<>();
     }
 
@@ -60,14 +66,26 @@ public class Meals {
         sugar += ingredient.getSugar();
     }
 
-    public void removeIngredient(Ingredients ingredient) {
+    //Return name of ingredient removed, 
+    //or null if ingredient was not found
+    public String removeIngredient(Ingredients ingredient) {
         if (ingredients.remove(ingredient)) {
             calories -= ingredient.getCalories();
             protein -= ingredient.getProtein();
             carbs -= ingredient.getCarbs();
             fat -= ingredient.getFat();
             sugar -= ingredient.getSugar();
+            return ingredient.getName();
         }
+        return null;
+    }
+
+    public String macrosPerServing() {
+        return name + " -- Calories: " + (calories / servings) 
+            + ", Protein: " + (protein / servings) 
+            + ", Carbs: " + (carbs / servings) 
+            + ", Fat: " + (fat / servings) 
+            + ", Sugar: " + (sugar / servings);
     }
 
     public void changeIngredientValue(Ingredients ingredient, String val, int newValue) {
@@ -75,32 +93,72 @@ public class Meals {
         if (index < 0) {
             return;
         }
-        switch (val) {
+        switch (val.toLowerCase()) {
             case "calories" -> {
-                calories -= ingredient.getCalories();
-                ingredient.setCalories(newValue);
-                calories += ingredient.getCalories();
+                int oldCalories = ingredients.get(index).getCalories();
+                try {
+                    ingredients.get(index).setCalories(newValue);
+                } catch (IllegalArgumentException e) {
+                    IO.println("Invalid calorie value. It cannot be negative. No changes were made to the ingredient.");
+                    // If the new value is negative, do not change the ingredient's value
+                    return;
+                }
+                calories -= oldCalories;
+                calories += ingredients.get(index).getCalories();
             }
             case "protein" -> {
-                protein -= ingredient.getProtein();
-                ingredient.setProtein(newValue);
-                protein += ingredient.getProtein();
+                int oldProtein = ingredients.get(index).getProtein();
+                try {
+                    ingredients.get(index).setProtein(newValue);
+                } catch (IllegalArgumentException e) {
+                    IO.println("Invalid protein value. It cannot be negative. No changes were made to the ingredient.");
+                    // If the new value is negative, do not change the ingredient's value
+                    return;
+                }
+                protein -= oldProtein;
+                protein += ingredients.get(index).getProtein();
             }
             case "carbs" -> {
-                carbs -= ingredient.getCarbs();
-                ingredient.setCarbs(newValue);
-                carbs += ingredient.getCarbs();
+                int oldCarbs = ingredients.get(index).getCarbs();
+                try {
+                    ingredients.get(index).setCarbs(newValue);
+                } catch (IllegalArgumentException e) {
+                    IO.println("Invalid carb value. It cannot be negative. No changes were made to the ingredient.");
+                    // If the new value is negative, do not change the ingredient's value
+                    return;
+                }
+                carbs -= oldCarbs;
+                carbs += ingredients.get(index).getCarbs();
             }
             case "fat" -> {
-                fat -= ingredient.getFat();
-                ingredient.setFat(newValue);
-                fat += ingredient.getFat();
+                int oldFat = ingredients.get(index).getFat();
+                try {
+                    ingredients.get(index).setFat(newValue);
+                } catch (IllegalArgumentException e) {
+                    IO.println("Invalid fat value. It cannot be negative. No changes were made to the ingredient.");
+                    // If the new value is negative, do not change the ingredient's value
+                    return;
+                }
+                fat -= oldFat;
+                fat += ingredients.get(index).getFat();
             }
             case "sugar" -> {
-                sugar -= ingredient.getSugar();
-                ingredient.setSugar(newValue);
-                sugar += ingredient.getSugar();
+                int oldSugar = ingredients.get(index).getSugar();
+                try {
+                    ingredients.get(index).setSugar(newValue);
+                } catch (IllegalArgumentException e) {
+                    IO.println("Invalid sugar value. It cannot be negative. No changes were made to the ingredient.");
+                    // If the new value is negative, do not change the ingredient's value
+                    return;
+                }
+                sugar -= oldSugar;
+                sugar += ingredients.get(index).getSugar();
             }
+            default -> {
+                IO.println("Invalid macro type. No changes were made to the ingredient.");
+                // Invalid value type, do nothing
+            }
+
         }
     }
 }
