@@ -1,4 +1,8 @@
+// Ingredients is a simple helper class that just holds macros of ingredients
+// Needs to implement Serializable, this is what allows the object to get written into a file
+// Must implement serializable because its used in meals.java, which gets written into a file
 public class Ingredients implements java.io.Serializable {
+    // Fields
     private int calories;
     private int protein;
     private int carbs;
@@ -6,6 +10,7 @@ public class Ingredients implements java.io.Serializable {
     private int sugar;
     private String name;
 
+    // Constructor
     public Ingredients(String name, int calories, int protein, int carbs, int fat, int sugar){
         this.name = name;
         this.calories = calories;
@@ -15,6 +20,7 @@ public class Ingredients implements java.io.Serializable {
         this.sugar = sugar;
     }
 
+    // getters and setters for fields
     public String getName() {
         return name;
     }
@@ -43,6 +49,7 @@ public class Ingredients implements java.io.Serializable {
         this.name = name;
     }
 
+    // Makes sure all values are valid (0 or above)
     public void setCalories(int calories) {
         if (calories < 0) {
             throw new IllegalArgumentException("Calorie value cannot be negative.");
