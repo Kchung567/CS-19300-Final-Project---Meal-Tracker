@@ -114,6 +114,8 @@ public class Main {
                     int servingsInput = Integer.parseInt(IO.readln());
                     if (servingsInput > 0) {
                         meal.setServings(servingsInput);
+                    } else {
+                        IO.println("Keeping current servings");
                     }
                 } catch (NumberFormatException e) {
                     IO.println("Keeping current servings");
@@ -121,7 +123,7 @@ public class Main {
                 
 
                 // allows user to add, remove, or update ingredients within their meals
-                String choice = IO.readln("Would you like to:\n1. Add an Ingredient\n2. Remove an Ingredient\n3. Update an Ingredient\n");
+                String choice = IO.readln("Would you like to (or press Enter to keep current):\n1. Add an Ingredient\n2. Remove an Ingredient\n3. Update an Ingredient\n");
                 switch (choice) {
                     case "1" -> gatherMacrosAndAddIngredients(meal); // calls helper method to add Ingredients
                     case "2" -> {
@@ -133,20 +135,25 @@ public class Main {
                         for (Ingredients ingredient : meal.getIngredients()) {
                             IO.println(ingredient.getName());
                         }
-                        String ingredientToRemove = IO.readln("Enter Ingredient you want to Remove\n");
-                        boolean ingredientFound = false;
-                        for (int i = 0; i < meal.getIngredients().size(); i++) {
-                            if (meal.getIngredients().get(i).getName().equalsIgnoreCase(ingredientToRemove)) {
-                                ingredientFound = true;
-                                // if found, use meal's remove ingredient method to properly remove the ingredient
-                                meal.removeIngredient(meal.getIngredients().get(i));
-                                IO.println("Ingredient Removed: " + ingredientToRemove);
-                                break;
-                            }
-                            if (!ingredientFound) {
-                                IO.println("Could Not Find Ingredient");
+                        if (meal.getIngredients().size() == 0) {
+                            IO.println("No Ingredients");
+                        } else {
+                            String ingredientToRemove = IO.readln("Enter Ingredient you want to Remove\n");
+                            boolean ingredientFound = false;
+                            for (int i = 0; i < meal.getIngredients().size(); i++) {
+                                if (meal.getIngredients().get(i).getName().equalsIgnoreCase(ingredientToRemove)) {
+                                    ingredientFound = true;
+                                    // if found, use meal's remove ingredient method to properly remove the ingredient
+                                    meal.removeIngredient(meal.getIngredients().get(i));
+                                    IO.println("Ingredient Removed: " + ingredientToRemove);
+                                    break;
+                                }
+                                if (!ingredientFound) {
+                                    IO.println("Could Not Find Ingredient");
+                                }
                             }
                         }
+                        
                     } case "3" -> {
                         // Ask to update ingredients
                         String ingredientName = IO.readln("Enter ingredient you want to update (or type 'done' to finish):\n");
@@ -263,12 +270,12 @@ public class Main {
         // if not, loop through list and print out the macros per serving
         if (meals.isEmpty()) {
             IO.println("No meals available.");
-            return;
-        }
-        for (int i = 0; i < meals.size(); i++) {
-            Meals meal = meals.get(i);
-            IO.println(meal.macrosPerServing());
-        }
+        } else {
+            for (int i = 0; i < meals.size(); i++) {
+                Meals meal = meals.get(i);
+                IO.println(meal.macrosPerServing());
+            }
+        }   
     }
 
 

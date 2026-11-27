@@ -113,7 +113,11 @@ public class Meals implements java.io.Serializable {
         for (Ingredients ingredient : ingredients) {
             ingredientNames += ingredient.getName() + ", ";
         }
-        ingredientNames = ingredientNames.substring(0, ingredientNames.length() - 2);
+        if (ingredientNames.isEmpty()) {
+            ingredientNames = "No ingredients";
+        } else {
+            ingredientNames = ingredientNames.substring(0, ingredientNames.length() - 2);
+        }
         return name + " -- Calories: " + (calories / servings) 
             + ", Protein: " + (protein / servings) 
             + ", Carbs: " + (carbs / servings) 
