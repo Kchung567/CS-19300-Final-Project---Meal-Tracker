@@ -104,6 +104,8 @@ public class Main {
                 String newName = IO.readln();
                 if (!newName.isEmpty()) {
                     meal.setName(newName);
+                } else {
+                    IO.println("Keeping current name");
                 }
                 
                 // Ask to change servings
@@ -114,7 +116,7 @@ public class Main {
                         meal.setServings(servingsInput);
                     }
                 } catch (NumberFormatException e) {
-                    IO.println("Invalid input for servings. Please enter a valid integer.");
+                    IO.println("Keeping current servings");
                 } 
                 
 
@@ -335,10 +337,77 @@ public class Main {
 
     private static void gatherMacrosAndAddIngredients(Meals meal) {
         boolean validInput = false;
+        boolean manual = false;
+        boolean loop = true;
         IO.println("Enter Ingredients for the meal (type 'done' when finished):");
+        if (System.getenv("FDC_API_KEY") == null) {
+            IO.println("No API Key, must manually input ingredients");
+            manual = true;
+        } else {
+            while(loop) {
+                String choice = IO.readln("Would you like to search or manually input ingredients? (Type Manual or Search)\n");
+                switch (choice.toLowerCase()) {
+                    case "manual" -> {
+                        manual = true;
+                        loop = false;
+                    }
+                    case "search" -> {
+                        String ingredient = IO.readln("What is the name of your Ingredient?\n");
+                        while (true) {
+                            if (ingredient.strip().isEmpty()) {
+                                ingredient = IO.readln("Please enter a proper Ingredient name. What is the name of your Ingredient?\n");
+                            } else {
+                                break;
+                            }
+                        }
+                        String[] results = FoodAPIClient.searchItem(ingredient);
+
+                        if (results == null || results.length == 0) {
+                            IO.println("No ingredients found. Switching to manual entry");
+                            manual = true;
+                            loop = false;
+                            break;
+                        }
+
+                        for (int i = 0; i < results.length; i++) {
+                            IO.println((i + 1) + ". " + results[i]);
+                        }
+
+                        int ingredientChoice = -1;
+                        while (true) {
+                            try {
+                                ingredientChoice = Integer.parseInt(IO.readln("Select which ingredient matches the best (1-" + results.length + ")\n"));
+                            } catch (NumberFormatException e) {
+                                IO.println("Please enter a valid integer");
+                            }
+                            if (ingredientChoice - 1 >= 0 && ingredientChoice - 1 <= results.length - 1) {
+                                int fdcIdIndex = results[ingredientChoice - 1].indexOf("ID: ");
+                                String fdcId = results[ingredientChoice - 1].substring(fdcIdIndex + 4);
+                                Ingredients userIngredient = FoodAPIClient.searchFDCID(fdcId);
+                                IO.println("Ingredient added: " + userIngredient.toString());
+                                meal.addIngredient(userIngredient);
+                                break;
+                            } else {
+                                IO.println("Please enter a number in between 1 and " + results.length);
+                            }
+                        }
+                        String again = IO.readln("Would you like to enter another ingredient? (y/n)\n");
+                        while (!again.equalsIgnoreCase("y") && !again.equalsIgnoreCase("n")) {
+                            again = IO.readln("Please enter a proper choice\n");
+                        }
+                        if (again.toLowerCase().equals("y")) {
+                            loop = true;
+                        } else {
+                            loop = false;
+                        }
+                    }
+                    default -> IO.println("Please enter a proper choice\n");
+                }
+            }
+        }
 
         // Will continue asking for ingredients until user says they are done
-        while (true) {
+        while (manual) {
             String ingredientName = IO.readln("Enter ingredient name (or 'done' to finish):\n");
             if (ingredientName.equalsIgnoreCase("done")) {
                 break;

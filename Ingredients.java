@@ -84,4 +84,13 @@ public class Ingredients implements java.io.Serializable {
         }
         this.sugar = sugar;
     }
+
+    @Override
+    public String toString() {
+        return name + " -- Calories: " + calories 
+        + ", Protein: " + protein
+        + ", Carbs: " + carbs
+        + ", Fats: " + fat 
+        + ", Sugars: " + sugar; 
+    }
 }

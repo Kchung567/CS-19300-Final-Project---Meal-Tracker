@@ -109,11 +109,18 @@ public class Meals implements java.io.Serializable {
     // Works like to string
     // returns a string containing the meal name and its macros per serving (respective macro / servings)
     public String macrosPerServing() {
+        String ingredientNames = "";
+        for (Ingredients ingredient : ingredients) {
+            ingredientNames += ingredient.getName() + ", ";
+        }
+        ingredientNames = ingredientNames.substring(0, ingredientNames.length() - 2);
         return name + " -- Calories: " + (calories / servings) 
             + ", Protein: " + (protein / servings) 
             + ", Carbs: " + (carbs / servings) 
             + ", Fat: " + (fat / servings) 
-            + ", Sugar: " + (sugar / servings);
+            + ", Sugar: " + (sugar / servings) 
+            + "\nIngredients -- "
+            + ingredientNames;
     }
 
     // Method to change the ingredients values

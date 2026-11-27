@@ -6,9 +6,8 @@ import java.nio.charset.StandardCharsets;
 import java.net.URLEncoder;
 import java.io.IOException;
 import java.lang.InterruptedException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
+import com.google.gson.JsonArray;
 // For Json Parsing
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -17,8 +16,8 @@ public class FoodAPIClient {
     private static String apiKey = System.getenv("FDC_API_KEY");
     
 
-    //given an item (ingredient name) return a url to search for it
-    public static String searchItem(String item) {
+    //given an ingredient name, return top 5 ingredients that match it
+    public static String[] searchItem(String item) {
         String query = URLEncoder.encode(item, StandardCharsets.UTF_8);
 
         String url = "https://api.nal.usda.gov/fdc/v1/foods/search?query=" 
@@ -26,7 +25,42 @@ public class FoodAPIClient {
             + "&api_key="
             + apiKey;
         
-            return url;
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpResponse<String> response = null;
+
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(url))
+            .GET()
+            .build();
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e){
+            IO.println("Response took too long");
+            return null;
+        }
+
+        if (response.statusCode() == 200) {
+            JsonObject root = JsonParser.parseString(response.body()).getAsJsonObject();
+            JsonArray foods = root.getAsJsonArray("foods");
+            int top5Length = Math.min(5, foods.size());
+            String[] top5 = new String[top5Length];
+            for (int i = 0; i < top5.length; i++) {
+                String match = "";
+                JsonObject food = foods.get(i).getAsJsonObject();
+                match += "Name: " + food.get("description").getAsString();
+                if (food.has("brandName")) {
+                    match += " | Brand: " + food.get("brandName").getAsString();
+                } else {
+                    match += " | Brand: " + "N/A";
+                }
+                match += " | FDCID: " + food.get("fdcId").getAsString();
+                top5[i] = match;
+            }
+            return top5;
+        }
+        
+        return null;
     }
 
     public static Ingredients searchFDCID(String id) {
@@ -44,6 +78,7 @@ public class FoodAPIClient {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e){
             IO.println("Response took too long");
+            return null;
         }
 
         if (response.statusCode() == 200) {
@@ -85,11 +120,5 @@ public class FoodAPIClient {
         }
 
         return null;
-    }
-
-    public static void main(String[] args) {
-        
-        Ingredients ingredient = searchFDCID("2012128");
-        IO.println(ingredient.toString());
     }
 }
