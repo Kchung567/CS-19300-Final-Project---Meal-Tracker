@@ -3,11 +3,11 @@ Java program to track macros of meals
 
 ## The Problem
 
-I want to solve calorie, and eventually macro tracking custom recipes for foods or drinks. Many calorie trackers don't have it for free or make it clunky to use.
+I want to solve calorie and macro tracking custom recipes for foods or drinks. Many calorie trackers don't have it for free or make it clunky to use.
 
 ## How It Works
 
-Welcomes user and then asks user whether they want to view meals or create a new one. Meals are stored in a .txt file, Meals.txt, which will be stored locally and then read on start of the program
+Welcomes user and then asks user whether they want to view, add, update, or delete meals, as well as whether they want to exit the app. Meals are stored in a .txt file, Meals.txt, which will be stored locally and then read on start of the program
 
 If they want to view:
  - reads a Meals.txt file 
@@ -18,7 +18,7 @@ If they want to add:
  - Manual input:
      - Have user input Ingredient name, calories, fats, proteins, sugars, and carbs
      - Add Ingredient to Meal
- - Search (Only works if user sets of environment variable with their own USDA Food API key, instructions in set up):
+ - Search (Only works if user sets up environment variable with their own USDA Food API key, instructions in set up):
      - User gives name of ingredient they want to add
      - Program searches USDA Food API
      - Adds ingredient to meal
@@ -44,8 +44,8 @@ Current Design:
 ## Tech Stack
 
 - **Language:** Java
-- **Libraries:** IO, Util, http, Gson
-- **External tools:** USDA Food API
+- **Libraries:** java.io, java.util, java.net.http, Gson
+- **External tools:** USDA FoodData Central API
 
 ## Prerequisites
 
@@ -73,7 +73,7 @@ Clone Repository
 git clone https://github.com/Kchung567/CS-19300-Final-Project---Meal-Tracker.git
 ```
 
-## Optional: USDA API Key Setup (Only do if you want to use the Search feature
+## Optional: USDA API Key Setup (Only do if you want to use the Search feature)
 
 Create a free API key at https://fdc.nal.usda.gov/api-key-signup#top.
   - The sign up will request name and email
@@ -96,6 +96,7 @@ Save the key as an environment variable named `FDC_API_KEY`. Different Methods e
 
    ```bash
    nano ~/.zshrc
+   ```
 3. Add line, but use the API key received in place of "YOUR_API_KEY"
    ```bash
    export FDC_API_KEY="YOUR_API_KEY"
@@ -105,10 +106,7 @@ Save the key as an environment variable named `FDC_API_KEY`. Different Methods e
    ```bash
    source ~/.zshrc
    ```
-6. Restart VS Code. If Key is still undetected. Run from terminal using:
-   ```bash
-   code .
-   ```
+6. Restart VS Code. 
 
 ### Linux
 1. Open **Terminal**.
@@ -116,6 +114,7 @@ Save the key as an environment variable named `FDC_API_KEY`. Different Methods e
 
    ```bash
    nano ~/.bashrc
+   ```
 3. Add line, but use the API key received in place of "YOUR_API_KEY"
    ```bash
    export FDC_API_KEY="YOUR_API_KEY"
@@ -126,6 +125,9 @@ Save the key as an environment variable named `FDC_API_KEY`. Different Methods e
    source ~/.bashrc
    ```
 6. Restart VS Code
+
+
+Do not add your API key to the source code, README, or GitHub.
 
 ## Usage
 
@@ -141,9 +143,9 @@ Open repository folder in VS Code
 
 ## Roadmap
 
-- [ ] Include Macros such as protein, fats, carbs, and sugars
+- [x] Include Macros such as protein, fats, carbs, and sugars
 - [ ] Import files of saved meals
-- [ ] Add welcome and goodbye messages
+- [x] Add welcome and goodbye messages
 
 ## Author
 
