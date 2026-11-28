@@ -391,6 +391,9 @@ public class Main {
                                 int fdcIdIndex = results[ingredientChoice - 1].indexOf("ID: ");
                                 String fdcId = results[ingredientChoice - 1].substring(fdcIdIndex + 4);
                                 Ingredients userIngredient = FoodAPIClient.searchFDCID(fdcId);
+                                if (userIngredient == null) {
+                                    break;
+                                }
                                 IO.println("Ingredient added: " + userIngredient.toString());
                                 meal.addIngredient(userIngredient);
                                 break;

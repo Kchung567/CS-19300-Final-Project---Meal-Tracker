@@ -89,7 +89,14 @@ public class FoodAPIClient {
             // and then uses that to search for macros
             JsonObject root = JsonParser.parseString(response.body()).getAsJsonObject();
             String name = root.get("description").getAsString();
-            JsonObject nutrients = root.getAsJsonObject("labelNutrients");
+            JsonObject nutrients = null;
+            if (root.has("labelNutrients")) {
+                nutrients = root.getAsJsonObject("labelNutrients");
+            } else {
+                IO.println("This option has no nutrition label available, please try again with Manual Input.");
+                return null;
+            }
+            
             
             // Calories
             JsonObject caloriesObject = nutrients.getAsJsonObject("calories");
